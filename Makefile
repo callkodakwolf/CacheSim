@@ -1,35 +1,67 @@
-CC = g++
-OPT = -O3
-#OPT = -g
-WARN = -Wall
-CFLAGS = $(OPT) $(WARN) $(INC) $(LIB)
+## ***************************************************************************
+##
+##  Makefile --
+##
+##  Original Author: Da Ke 
+##
+## ***************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##	Da Ke,	North Caolina State University, Nov. 22 2014
+##  Description of Modification:
+## 	Include SystemC installation path 
+## ***************************************************************************
 
-List all your .cc files here (source files, excluding header files)
-SIM_SRC = main.cc world.cc
-#
-List corresponding compiled object files here (.o files)
-SIM_OBJ = main.o world.o
- 
+CC = gcc
+#OPT = -O3
+WARN = -Wall -g -pedantic -Wno-long-long -Werror
+
+## Variable that points to SystemC installation path
+SYSTEMC_HOME?=/usr/local/systemc-2.3.1
+
+## Select the target Architecture
+TARGET_ARCH = linux64
+
+## Select the architecture suffix, if necessary
+ARCH_SUFFIX = -$(TARGET_ARCH)
+
+# Explicit location of the SystemC headers
+SYSTEMC_INC_DIR =-I. -I$(SYSTEMC_HOME)/include
+
+# Explicit location if the SystenC library
+SYSTEMC_LIB_DIR = $(SYSTEMC_HOME)/lib$(ARCH_SUFFIX)
+
+LIBS = -lsystemc -lstdc++ -lm
+
+CFLAGS = $(SYSTEMC_INC_DIR) -L$(SYSTEMC_LIB_DIR) $(LIBS)
+
+# Header files used, for dependancy checking
+# HEADERS = 
+
+# List all your .cc files here (source files, excluding header files)
+SIM_SRC = main.cc
+
+# List corresponding compiled object files here (.o files)
+SIM_OBJ = main.o
+
+# dependency:
+DEPENDENCIES = $(HEADERS) $(SIM_SRC) $(SIM_OBJ) 
 ################################
 
 #default rule
 
 all: sim_cache
-	@echo "my work is done here..."
+	@echo "my work is done here..." \
+	./sim_cache
 
+# rule for making sim_cache
 
-#	rule for making sim_cache
-
-sim_cache: $(SIM_OBJ)
-	$(CC) -o sim_cache $(CFLAGS) $(SIM_OBJ) -lm
+sim_cache: $(DEPENDENCIES)
+	$(CC) $(WARN) -o sim_cache $(SIM_SRC) $(CFLAGS) 
 	@echo "-----------DONE WITH SIM_CACHE-----------"
-
-
-#generic rule for converting any .cc file to any .o file
-		 
-.cc.o:
-	$(CC) $(CFLAGS)  -c $*.cc
-
 
 #type "make clean" to remove all .o files plus the sim_cache binary
 clean:
