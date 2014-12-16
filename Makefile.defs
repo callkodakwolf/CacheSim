@@ -24,7 +24,7 @@ WARN = -Wall -pedantic -Wno-long-long -Werror
 SYSTEMC_HOME =/usr/local/systemc-2.3.1
 
 ## Select the target Architecture
-TARGET_ARCH = linux64
+TARGET_ARCH =linux64
 
 ## Select the architecture suffix, if necessary
 ARCH_SUFFIX = -$(TARGET_ARCH)
@@ -35,6 +35,6 @@ SYSTEMC_INC_DIR =-I. -I$(SYSTEMC_HOME)/include
 # Explicit location if the SystenC library
 SYSTEMC_LIB_DIR = -L $(SYSTEMC_HOME)/lib$(ARCH_SUFFIX)
 
-LIBS = $(SYSTEMC_LIB_DIR)  -lsystemc -lstdc++ -lm -lqt
+LIBS = $(SYSTEMC_LIB_DIR)  -lsystemc -lstdc++ -lm 
 
 CFLAGS = $(WARN) $(DEBUG) $(OPT) $(SYSTEMC_INC_DIR) $(LIBS)
